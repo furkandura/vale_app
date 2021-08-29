@@ -10,7 +10,33 @@ import (
 )
 
 func Login(c echo.Context) error {
-	return c.JSON(http.StatusNotFound, "Sea")
+	var req requests.CompanyLoginRequest
+
+	_ = c.Bind(&req)
+
+	err := c.Validate(&req)
+
+	if err != nil {
+		return c.JSON(http.StatusNotFound, helpers.Response(err.Error(), nil, http.StatusNotFound))
+	}
+
+	user := repository.Get().Company().Login(req.Phone, req.Password)
+
+	if user.ID == 0 {
+		return c.JSON(http.StatusNotFound, helpers.Response("Girdiğiniz telefon numarası veya şifre yanlış.", nil, http.StatusNotFound))
+	}
+
+	token, err := helpers.GenerateToken(user.ID)
+
+	if err != nil {
+		return c.JSON(http.StatusNotFound, helpers.Response("Oturum anahtarı oluşturulurken bir hata oluştu.", nil, http.StatusNotFound))
+	}
+
+	return c.JSON(http.StatusOK, helpers.Response("Giriş başarılı.", map[string]interface{}{
+		"token": token,
+		"user":  user,
+	}, http.StatusOK))
+
 }
 
 func Register(c echo.Context) error {

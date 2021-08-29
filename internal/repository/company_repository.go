@@ -44,3 +44,17 @@ func (cr *CompanyRepository) RepeatedPhoneCheck(phone string) bool {
 
 	return true
 }
+
+func (cr *CompanyRepository) Login(phone string, password string) models.Company {
+	var user models.Company
+
+	cr.DB.Model(&models.Company{}).Where("phone = ?", phone).First(&user)
+
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+
+	if err != nil {
+		return user
+	}
+
+	return user
+}
