@@ -1,2 +1,2 @@
-# vale_app
-Vale uygulaması
+# Vale Uygulaması
+29.08.2021 Vale uygulamasına devam ediliyor...
