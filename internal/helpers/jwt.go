@@ -6,7 +6,7 @@ import (
 	"time"
 	"vale_app/configs"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo"
 )
 
