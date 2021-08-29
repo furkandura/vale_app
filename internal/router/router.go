@@ -1,9 +1,9 @@
 package router
 
 import (
-	"fmt"
 	"vale_app/internal/api/company"
-	"vale_app/internal/helpers"
+	"vale_app/internal/api/customer"
+	"vale_app/internal/api/parking"
 	"vale_app/internal/middlewares"
 
 	"github.com/labstack/echo"
@@ -16,11 +16,16 @@ func Set(e *echo.Echo) {
 	companyRoutes := api.Group("/company")
 	companyRoutes.POST("/register", company.Register)
 	companyRoutes.POST("/login", company.Login)
-	companyRoutes.POST("/test", func(c echo.Context) error {
+	companyRoutes.POST("/update", company.Update, middlewares.VerifyToken)
 
-		fmt.Println(helpers.GetAuthID(c))
-		return nil
+	parkingRoutes := api.Group("/parking", middlewares.VerifyToken)
+	parkingRoutes.POST("/create", parking.Create)
+	parkingRoutes.POST("/update", parking.Update)
+	parkingRoutes.GET("/delete/:id", parking.Delete)
 
-	}, middlewares.VerifyToken)
+	customerRoutes := api.Group("/customer", middlewares.VerifyToken)
+	customerRoutes.POST("/create", customer.Create)
+	customerRoutes.POST("/update", customer.Update)
+	customerRoutes.GET("/delete/:id", customer.Delete)
 
 }

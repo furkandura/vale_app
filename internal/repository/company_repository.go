@@ -58,3 +58,17 @@ func (cr *CompanyRepository) Login(phone string, password string) models.Company
 
 	return user
 }
+
+func (cr *CompanyRepository) Update(req requests.CompanyUpdateRequest, companyId int) error {
+
+	password, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+
+	company := models.Company{
+		FullName: req.FullName,
+		Phone:    req.Phone,
+		Password: string(password),
+		Email:    req.Email,
+	}
+
+	return cr.DB.Model(models.Company{}).Where("id = ?", companyId).Updates(&company).Error
+}

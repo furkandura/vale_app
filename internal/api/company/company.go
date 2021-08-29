@@ -20,13 +20,13 @@ func Login(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, helpers.Response(err.Error(), nil, http.StatusNotFound))
 	}
 
-	user := repository.Get().Company().Login(req.Phone, req.Password)
+	company := repository.Get().Company().Login(req.Phone, req.Password)
 
-	if user.ID == 0 {
+	if company.ID == 0 {
 		return c.JSON(http.StatusNotFound, helpers.Response("Girdiğiniz telefon numarası veya şifre yanlış.", nil, http.StatusNotFound))
 	}
 
-	token, err := helpers.GenerateToken(user.ID)
+	token, err := helpers.GenerateToken(company.ID)
 
 	if err != nil {
 		return c.JSON(http.StatusNotFound, helpers.Response("Oturum anahtarı oluşturulurken bir hata oluştu.", nil, http.StatusNotFound))
@@ -34,7 +34,7 @@ func Login(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, helpers.Response("Giriş başarılı.", map[string]interface{}{
 		"token": token,
-		"user":  user,
+		"user":  company,
 	}, http.StatusOK))
 
 }
@@ -69,5 +69,32 @@ func Register(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helpers.Response("Kayıt başarıyla oluşturuldu.", nil, http.StatusOK))
+
+}
+
+func Update(c echo.Context) error {
+	var req requests.CompanyUpdateRequest
+
+	_ = c.Bind(&req)
+
+	isValidPhone := helpers.IsValidPhone(req.Phone)
+
+	if isValidPhone == false {
+		return c.JSON(http.StatusNotFound, helpers.Response("Girilen telefon numarası geçersiz.", nil, http.StatusNotFound))
+	}
+
+	isRepeatPhone := repository.Get().Company().RepeatedPhoneCheck(req.Phone)
+
+	if isRepeatPhone == false {
+		return c.JSON(http.StatusNotFound, helpers.Response("Girilen telefon numarasını başka bir hesap zaten kullanılıyor.", nil, http.StatusNotFound))
+	}
+
+	err := repository.Get().Company().Update(req, helpers.GetAuthID(c))
+
+	if err != nil {
+		return c.JSON(http.StatusNotFound, helpers.Response("Kayıt güncellenirken bir hata oluştu.", nil, http.StatusNotFound))
+	}
+
+	return c.JSON(http.StatusOK, helpers.Response("Kayıt başarıyla güncellendi.", nil, http.StatusOK))
 
 }

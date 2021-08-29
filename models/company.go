@@ -1,7 +1,7 @@
 package models
 
 type Company struct {
-	BaseModel
+	Base
 	FullName    string  `json:"full_name"`
 	Phone       string  `json:"phone"`
 	CompanyName string  `json:"company_name"`

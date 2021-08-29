@@ -32,5 +32,9 @@ func Connect() {
 }
 
 func AutoMigrate() {
-	DB.AutoMigrate(&models.Company{})
+	DB.AutoMigrate(
+		&models.Company{},
+		&models.Parking{},
+		&models.Customer{},
+	)
 }

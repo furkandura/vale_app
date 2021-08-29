@@ -47,10 +47,10 @@ func GetHeaderToken(c echo.Context) string {
 	return headerToken
 }
 
-func GenerateToken(userId int) (string, error) {
+func GenerateToken(companyId int) (string, error) {
 
 	claims := &JwtCustomClaims{
-		ID: userId,
+		ID: companyId,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 12).Unix(),
 		},
