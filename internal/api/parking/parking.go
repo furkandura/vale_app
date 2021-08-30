@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo"
 )
 
+// Park kaydı oluşturur.
 func Create(c echo.Context) error {
 	var req requests.ParkingCreateRequest
 
@@ -19,6 +20,12 @@ func Create(c echo.Context) error {
 
 	if err != nil {
 		return c.JSON(http.StatusNotFound, helpers.Response(err.Error(), nil, http.StatusNotFound))
+	}
+
+	isCustomerAuth := repository.Get().Customer().CheckCustomerAuth(req.CustomerId, helpers.GetAuthID(c))
+
+	if !isCustomerAuth {
+		return c.JSON(http.StatusNotFound, helpers.Response("Müşteri kaydı bulunamadı.", nil, http.StatusNotFound))
 	}
 
 	err = repository.Get().Parking().New(req, helpers.GetAuthID(c))
@@ -31,6 +38,7 @@ func Create(c echo.Context) error {
 
 }
 
+// Park kaydını günceller.
 func Update(c echo.Context) error {
 	var req requests.ParkingUpdateRequest
 
@@ -62,6 +70,7 @@ func Update(c echo.Context) error {
 
 }
 
+// Park kaydını siler.
 func Delete(c echo.Context) error {
 
 	id := c.Param("id")

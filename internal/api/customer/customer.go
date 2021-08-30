@@ -3,6 +3,7 @@ package customer
 import (
 	"net/http"
 	"strconv"
+	"strings"
 	"vale_app/internal/helpers"
 	"vale_app/internal/repository"
 	"vale_app/models/requests"
@@ -10,6 +11,7 @@ import (
 	"github.com/labstack/echo"
 )
 
+// Müşteri oluşturur.
 func Create(c echo.Context) error {
 	var req requests.CustomerCreateRequest
 
@@ -32,8 +34,10 @@ func Create(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helpers.Response("Kayıt başarıyla oluşturuldu.", nil, http.StatusOK))
+
 }
 
+// Müşteriyi günceller.
 func Update(c echo.Context) error {
 	var req requests.CustomerUpdateRequest
 
@@ -62,8 +66,10 @@ func Update(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helpers.Response("Kayıt başarıyla güncellendi.", nil, http.StatusOK))
+
 }
 
+// Müşteriyi siler.
 func Delete(c echo.Context) error {
 
 	id := c.Param("id")
@@ -76,7 +82,7 @@ func Delete(c echo.Context) error {
 	checkCustomerAuth := repository.Get().Customer().CheckCustomerAuth(idInt, helpers.GetAuthID(c))
 
 	if !checkCustomerAuth {
-		return c.JSON(http.StatusNotFound, helpers.Response("Park kaydı bulunamadı.", nil, http.StatusNotFound))
+		return c.JSON(http.StatusNotFound, helpers.Response("Müşteri kaydı bulunamadı.", nil, http.StatusNotFound))
 	}
 
 	err = repository.Get().Customer().Delete(idInt)
@@ -86,5 +92,27 @@ func Delete(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helpers.Response("Kayıt başarıyla silindi.", nil, http.StatusOK))
+
+}
+
+// Müşterinin araç plakalarını getirir.
+func Vehicles(c echo.Context) error {
+
+	id := c.Param("customer_id")
+	idInt, err := strconv.Atoi(id)
+
+	if err != nil {
+		return c.JSON(http.StatusNotFound, helpers.Response("Geçerli bir id girilmedi.", nil, http.StatusNotFound))
+	}
+
+	isCustomerAuth := repository.Get().Customer().CheckCustomerAuth(idInt, helpers.GetAuthID(c))
+
+	if !isCustomerAuth {
+		return c.JSON(http.StatusNotFound, helpers.Response("Müşteri kaydı bulunamadı.", nil, http.StatusNotFound))
+	}
+
+	customer := repository.Get().Customer().FindById(idInt)
+
+	return c.JSON(http.StatusOK, helpers.Response("", strings.Split(customer.Vehicles, ","), http.StatusOK))
 
 }

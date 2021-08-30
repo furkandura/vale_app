@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo"
 )
 
+// Vale firmasi giriş.
 func Login(c echo.Context) error {
 	var req requests.CompanyLoginRequest
 
@@ -39,6 +40,7 @@ func Login(c echo.Context) error {
 
 }
 
+// Vale firmasi kayıt ol.
 func Register(c echo.Context) error {
 	var req requests.CompanyRegisterRequest
 
@@ -72,6 +74,7 @@ func Register(c echo.Context) error {
 
 }
 
+// Vale firmasi bilgileri güncele.
 func Update(c echo.Context) error {
 	var req requests.CompanyUpdateRequest
 

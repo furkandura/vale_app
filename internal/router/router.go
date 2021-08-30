@@ -27,5 +27,6 @@ func Set(e *echo.Echo) {
 	customerRoutes.POST("/create", customer.Create)
 	customerRoutes.POST("/update", customer.Update)
 	customerRoutes.GET("/delete/:id", customer.Delete)
+	customerRoutes.GET("/get/vehicles/:customer_id", customer.Vehicles)
 
 }

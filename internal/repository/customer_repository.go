@@ -53,3 +53,10 @@ func (pr *CustomerRepository) Delete(customerId int) error {
 	var delete models.Parking
 	return pr.DB.Model(&models.Customer{}).Where("id = ?", customerId).Delete(&delete).Error
 }
+
+func (pr *CustomerRepository) FindById(customerId int) models.Customer {
+	var customer models.Customer
+	pr.DB.Model(&models.Customer{}).Where("id = ?", customerId).First(&customer)
+
+	return customer
+}
