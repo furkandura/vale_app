@@ -3,7 +3,7 @@ package models
 import "gorm.io/gorm"
 
 type Customer struct {
-	gorm.Model
+	Base
 	FullName  string  `json:"full_name"`
 	CompanyId int     `json:"company_id"`
 	Phone     *string `json:"phone"`
