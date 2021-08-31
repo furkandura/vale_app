@@ -7,7 +7,7 @@ import (
 )
 
 type Parking struct {
-	gorm.Model
+	Base
 	CompanyId      int        `json:"company_id"`
 	CustomerId     int        `json:"customer_id"`
 	Type           int8       `json:"type" gorm:"default:1"` // 1 => Müşteriden teslim alındı. 2 => Müşteriye teslim edildi.
