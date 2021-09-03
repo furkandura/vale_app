@@ -1,7 +1,5 @@
 package models
 
-import "gorm.io/gorm"
-
 type Customer struct {
 	Base
 	FullName  string  `json:"full_name"`
