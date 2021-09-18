@@ -1,5 +1,8 @@
 package requests
 
+// Endpoint => api/company/update
+// Method => POST
+
 type CompanyUpdateRequest struct {
 	FullName string  `json:"full_name"  validate:"required"`
 	Phone    string  `json:"phone" validate:"required"`

@@ -19,11 +19,13 @@ func Set(e *echo.Echo) {
 	companyRoutes.POST("/update", company.Update, middlewares.VerifyToken)
 
 	parkingRoutes := api.Group("/parking", middlewares.VerifyToken)
+	parkingRoutes.GET("/all", parking.All)
 	parkingRoutes.POST("/create", parking.Create)
 	parkingRoutes.POST("/update", parking.Update)
 	parkingRoutes.GET("/delete/:id", parking.Delete)
 
 	customerRoutes := api.Group("/customer", middlewares.VerifyToken)
+	customerRoutes.GET("/all", customer.All)
 	customerRoutes.POST("/create", customer.Create)
 	customerRoutes.POST("/update", customer.Update)
 	customerRoutes.GET("/delete/:id", customer.Delete)

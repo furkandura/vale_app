@@ -2,6 +2,9 @@ package requests
 
 import "time"
 
+// Endpoint => api/parking/create
+// Method => POST
+
 type ParkingCreateRequest struct {
 	CustomerId    int       `json:"customer_id" validate:"required"`
 	Type          int8      `json:"type" validate:"required"`

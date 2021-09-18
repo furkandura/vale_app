@@ -2,6 +2,9 @@ package requests
 
 import "time"
 
+// Endpoint => api/parking/update
+// Method => POST
+
 type ParkingUpdateRequest struct {
 	ParkingId      int        `json:"parking_id" validate:"required"`
 	CustomerId     int        `json:"customer_id" validate:"required"`

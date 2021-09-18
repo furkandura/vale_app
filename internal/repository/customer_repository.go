@@ -37,10 +37,10 @@ func (cr *CustomerRepository) Update(req requests.CustomerUpdateRequest, company
 }
 
 // Girilen müşteri kaydı oturum açmış kullancının mı kontrolü
-func (pr *CustomerRepository) CheckCustomerAuth(customerId int, companyId int) bool {
+func (cr *CustomerRepository) CheckCustomerAuth(customerId int, companyId int) bool {
 	var count int64
 
-	pr.DB.Model(&models.Customer{}).Where("company_id = ?", companyId).Where("id = ?", customerId).Count(&count)
+	cr.DB.Model(&models.Customer{}).Where("company_id = ?", companyId).Where("id = ?", customerId).Count(&count)
 
 	if count == 0 {
 		return false
@@ -49,9 +49,19 @@ func (pr *CustomerRepository) CheckCustomerAuth(customerId int, companyId int) b
 	return true
 }
 
-func (pr *CustomerRepository) Delete(customerId int) error {
+func (cr *CustomerRepository) Delete(customerId int) error {
 	var delete models.Parking
-	return pr.DB.Model(&models.Customer{}).Where("id = ?", customerId).Delete(&delete).Error
+	return cr.DB.Model(&models.Customer{}).Where("id = ?", customerId).Delete(&delete).Error
+}
+
+func (cr *CustomerRepository) All(companyId int) []models.Customer {
+
+	var customers []models.Customer
+
+	cr.DB.Model(&models.Customer{}).Where("company_id = ?", companyId).Find(&customers)
+
+	return customers
+
 }
 
 func (pr *CustomerRepository) FindById(customerId int) models.Customer {

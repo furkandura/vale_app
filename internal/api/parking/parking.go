@@ -10,6 +10,12 @@ import (
 	"github.com/labstack/echo"
 )
 
+// Park kayıtlarını döner
+func All(c echo.Context) error {
+	parkings := repository.Get().Parking().All(helpers.GetAuthID(c))
+	return c.JSON(http.StatusOK, helpers.Response("", parkings, 200))
+}
+
 // Park kaydı oluşturur.
 func Create(c echo.Context) error {
 	var req requests.ParkingCreateRequest

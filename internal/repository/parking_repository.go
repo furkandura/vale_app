@@ -43,6 +43,16 @@ func (pr *ParkingRepository) Update(req requests.ParkingUpdateRequest, companyId
 	return pr.DB.Model(&models.Parking{}).Where("id = ?", req.ParkingId).Updates(&parking).Error
 }
 
+func (pr *ParkingRepository) All(companyId int) []models.Parking {
+
+	var parkings []models.Parking
+
+	pr.DB.Model(&models.Parking{}).Where("company_id = ?", companyId).Find(&parkings)
+
+	return parkings
+
+}
+
 // Girilen park kaydı oturum açmış kullancının mı kontrolü
 func (pr *ParkingRepository) CheckParkingAuth(parkingId int, companyId int) bool {
 	var count int64

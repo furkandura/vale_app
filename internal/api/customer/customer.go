@@ -11,6 +11,12 @@ import (
 	"github.com/labstack/echo"
 )
 
+// Müşterileri döner.
+func All(c echo.Context) error {
+	customers := repository.Get().Customer().All(helpers.GetAuthID(c))
+	return c.JSON(http.StatusOK, helpers.Response("", customers, 200))
+}
+
 // Müşteri oluşturur.
 func Create(c echo.Context) error {
 	var req requests.CustomerCreateRequest
